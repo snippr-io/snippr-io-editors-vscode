@@ -1,21 +1,20 @@
 {
-  "name": "snippr-io-editors-vscode",
-  "displayName": "Snippr.io for VSCode",
-  "description": "A plugin that allows snippr.io to integrate with VSCode",
-  "version": "1.0.0",
-  "publisher": "snippr.io",
-  "repository": "https://github.com/snippr-io/snippr-io-editors-atom.git",
-  "engines": {
-    "vscode": "^1.34.0"
-  },
-  "categories": [
-    "Snippets"
-  ],
-  "activationEvents": [],
-  "main": "./extension.js",
-  "contributes": {},
-  "devDependencies": {
-    "@types/node": "^8.10.25",
-    "@types/vscode": "^1.34.0"
-  }
+	"name": "snippr-io-editors-vscode",
+	"displayName": "Snippr for VSCode",
+	"description": "Visual Studio Code Extension for Snippr Integration",
+	"version": "1.0.0",
+	"publisher": "snippr.io",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"activationEvents": [
+		"*"
+	],
+	"main": "./extension.js",
+	"contributes": {
+	},
+	"scripts": {},
+	"devDependencies": {
+		"@types/vscode": "^1.32.0"
+	}
 }
