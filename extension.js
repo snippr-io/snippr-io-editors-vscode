@@ -15,7 +15,8 @@ class SnippetCompletionItemProvider {
     }
 
     loadSnippets() {
-        this.completions = new vscode.CompletionList()
+        this.completions = {}
+        this.snippetsCount = 0
 
         let store
         try {
@@ -34,10 +35,9 @@ class SnippetCompletionItemProvider {
             this.loadSnippetCollection(name, store.VSCode[name])
 
         const collectionCount = Object.keys(store.VSCode).length
-        const snippetsCount = this.completions.items.length
         const collectionWord = collectionCount == 1 ? "collection" : "collections"
-        const snippetWord = snippetsCount == 1 ? "snippet" : "snippets"
-        vscode.window.setStatusBarMessage(`Successfully loaded ${collectionCount} snippr ${collectionWord} containing ${snippetsCount} ${snippetWord}.`, 5000)
+        const snippetWord = this.snippetsCount == 1 ? "snippet" : "snippets"
+        vscode.window.setStatusBarMessage(`Successfully loaded ${collectionCount} snippr ${collectionWord} containing ${this.snippetsCount} ${snippetWord}.`, 5000)
     }
 
     loadSnippetCollection(name, data) {
@@ -59,21 +59,29 @@ class SnippetCompletionItemProvider {
     }
 
     loadSnippet(name, spec) {
-        const completionItem = new vscode.CompletionItem(name, vscode.CompletionItemKind.Snippet)
-        completionItem.filterText = spec.prefix
-        completionItem.insertText = new vscode.SnippetString(Array.isArray(spec.body) ? spec.body.join("\n") : spec.body)
-        completionItem.detail = spec.description
-        completionItem.documentation = new vscode.MarkdownString().appendCodeblock(completionItem.insertText.value)
-        this.completions.items.push(completionItem)
+        for(let i = 0; i < spec.prefix.length; i++) {
+            const completionItem = new vscode.CompletionItem(name, vscode.CompletionItemKind.Snippet)
+            completionItem.filterText = spec.prefix[i]
+            completionItem.insertText = new vscode.SnippetString(Array.isArray(spec.body) ? spec.body.join("\n") : spec.body)
+            completionItem.detail = spec.description
+            completionItem.documentation = new vscode.MarkdownString().appendCodeblock(completionItem.insertText.value)
+
+            if(!this.completions[spec.scope])
+                this.completions[spec.scope] = new vscode.CompletionList()
+            this.completions[spec.scope].items.push(completionItem)
+        }
+        this.snippetsCount++
     }
 
     provideCompletionItems(document, position, token) {
-        return this.completions
+        return this.completions[document.languageId]
     }
 }
 
 function activate(context) {
-    context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: "file" }, new SnippetCompletionItemProvider()))
+    const provider = new SnippetCompletionItemProvider()
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: "file" }, provider))
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: "untitled" }, provider))
 }
 
 function deactivate() {}
