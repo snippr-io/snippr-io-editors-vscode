@@ -1,5 +1,5 @@
 {
-	"name": "snippr-io-editors-vscode",
+	"name": "snippr",
 	"displayName": "Snippr for VSCode",
 	"description": "Visual Studio Code Extension for Snippr Integration",
 	"version": "1.0.0",
