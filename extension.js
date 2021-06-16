@@ -37,7 +37,7 @@ class SnippetCompletionItemProvider {
         const collectionCount = Object.keys(store.VSCode).length
         const collectionWord = collectionCount == 1 ? "collection" : "collections"
         const snippetWord = this.snippetsCount == 1 ? "snippet" : "snippets"
-        vscode.window.setStatusBarMessage(`Successfully loaded ${collectionCount} snippr ${collectionWord} containing ${this.snippetsCount} ${snippetWord}.`, 5000)
+        vscode.window.setStatusBarMessage(`Successfully loaded ${collectionCount} snippr.io ${collectionWord} containing ${this.snippetsCount} ${snippetWord}.`, 5000)
     }
 
     loadSnippetCollection(name, data) {
@@ -66,9 +66,11 @@ class SnippetCompletionItemProvider {
             completionItem.detail = spec.description
             completionItem.documentation = new vscode.MarkdownString().appendCodeblock(completionItem.insertText.value)
 
-            if(!this.completions[spec.scope])
-                this.completions[spec.scope] = new vscode.CompletionList()
-            this.completions[spec.scope].items.push(completionItem)
+            for (let scope of spec.scopes) {
+                if(!this.completions[scope])
+                    this.completions[scope] = new vscode.CompletionList()
+                this.completions[scope].items.push(completionItem)
+            }
         }
         this.snippetsCount++
     }

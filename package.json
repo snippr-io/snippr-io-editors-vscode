@@ -2,7 +2,7 @@
 	"name": "snippr",
 	"displayName": "Snippr for VSCode",
 	"description": "Visual Studio Code Extension for Snippr Integration",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "snippr",
 	"engines": {
 		"vscode": "^1.32.0"
