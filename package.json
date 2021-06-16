@@ -11,8 +11,7 @@
 		"*"
 	],
 	"main": "./extension.js",
-	"contributes": {
-	},
+	"contributes": {},
 	"scripts": {},
 	"devDependencies": {
 		"@types/vscode": "^1.32.0"
